@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>  
+  
+<Server port="8054" shutdown="SHUTDOWN">  
+    <!-- Security listener. Documentation at /docs/config/listeners.html <Listener   
+        className="org.apache.catalina.security.SecurityListener" /> -->  
+    <!--APR library loader. Documentation at /docs/apr.html -->  
+    <Listener className="org.apache.catalina.core.AprLifecycleListener"  
+        SSLEngine="on" />  
+    <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->  
+    <Listener className="org.apache.catalina.core.JasperListener" />  
+    <!-- Prevent memory leaks due to use of particular java/javax APIs -->  
+    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />  
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />  
+    <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />  
+    <GlobalNamingResources>  
+        <Resource name="UserDatabase" auth="Container"  
+            type="org.apache.catalina.UserDatabase" description="User database that can be updated and saved"  
+            factory="org.apache.catalina.users.MemoryUserDatabaseFactory"  
+            pathname="conf/tomcat-users.xml" />  
+    </GlobalNamingResources>  
+    <Service name="Catalina">  
+        <!--protocol 请使用nio2，或者apr -->  
+        <Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="9543" />  
+        <Connector port="8909" protocol="AJP/1.3" redirectPort="9543" />  
+        <Engine name="Catalina" defaultHost="localhost">  
+            <Realm className="org.apache.catalina.realm.LockOutRealm">  
+                <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase" />  
+            </Realm>  
+            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">  
+                <Valve className="org.apache.catalina.valves.AccessLogValve"  
+                    directory="logs" prefix="localhost_access_log." suffix=".txt"  
+                    pattern="%h %l %u %t "%r" %s %b"/>  
+                <Context path="/route" reloadable="true" docBase="/home/develop/tomcat-7.0.54/flatrass" />  
+            </Host>  
+        </Engine>  
+    </Service>  
+	<!--多项目不同端口部署，拷贝Service标签，修改Connector中的port属性为指定的端口即可->
+    <Service name="Catalina">  
+        <!--把port改成8081 -->  
+        <!--protocol 请使用nio2，或者apr -->  
+        <Connector port="8081" protocol="HTTP/1.1"  
+            connectionTimeout="20000" redirectPort="9543" />  
+        <Connector port="8909" protocol="AJP/1.3" redirectPort="9543" />  
+        <Engine name="Catalina" defaultHost="localhost">  
+            <Realm className="org.apache.catalina.realm.LockOutRealm">  
+                <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase" />  
+            </Realm>  
+            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">  
+                <Valve className="org.apache.catalina.valves.AccessLogValve"  
+                    directory="logs" prefix="localhost_access_log." suffix=".txt"  
+                    pattern="%h %l %u %t "%r" %s %b"/>
+				<!--虚拟目录配置 -->
+                <Context path="/route" reloadable="true"  
+                    docBase="/home/develop/tomcat-7.0.54/flatrasweats" />  
+            </Host>  
+        </Engine>  
+    </Service>  
+</Server> 
