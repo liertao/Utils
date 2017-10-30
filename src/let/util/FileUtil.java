@@ -1,6 +1,10 @@
 package let.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintStream;
 
 /**
  * @Des:文件操作工具类
@@ -73,6 +77,68 @@ public class FileUtil {
 	}
 	
 	/**
+	 * 将制定的字符串写入到指定的文件中,使用（FileOutputStream）
+	 * 
+	 * 		其中FileOutputStream fs = new FileOutputStream(filePath,true)中的true参数
+	 * 		表示在文档末尾追加数据，如果没有true则表示每次覆盖文档内容
+	 * 
+	 * @param str
+	 * @param filePath
+	 * @return
+	 */
+	public static boolean str2File2(String str,String filePath)throws Exception{
+		createFile(filePath);
+		FileOutputStream fs = new FileOutputStream(filePath,true);
+		if(str==null)return false;//如果字符串为null直接返回
+		str.getBytes();
+		fs.write(str.getBytes());
+		fs.close();//关闭流，节省资源
+		return true;
+	}
+	
+	/**
+	 * 将制定的字符串写入到指定的文件中,使用（FileWriter）
+	 * 
+	 * 
+	 * @param str
+	 * @param filePath
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean str2File3(String str,String filePath)throws Exception{
+		createFile(filePath);
+		FileWriter fw = new FileWriter(filePath,true);
+		BufferedWriter bf = new BufferedWriter(fw);
+		if(str==null) return false;
+		bf.write(str);
+		bf.append(str);
+		bf.close();
+		fw.close();
+		return true;
+	}
+	
+	/**
+	 * 将制定的字符串写入到指定的文件中,使用（PrintStream）
+	 * 
+	 * 		使用  PrintStream  快速输出，本程序每次执行是直接覆盖，如果是追加
+	 * 		则使用：ps.append(str2);
+	 * 		如果转行：在str中加入  \r\n  实现转行
+	 * 
+	 * @param str
+	 * @param String
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public static boolean str2File(String str,String filePath)throws Exception{
+		
+		createFile(filePath);
+		PrintStream ps = new PrintStream(new FileOutputStream(new File(filePath)));
+		ps.println(str);
+		ps.close();//关闭流，节省资源
+		return true;
+	}
+	
+	/**
 	 * 主程序测试
 	 * @param args
 	 */
@@ -82,7 +148,14 @@ public class FileUtil {
 //		if(createDir(path))
 //			System.out.println("创建成功");
 		//测试创建文件
-		createFile(path);
+		//createFile(path);
+		String str = "你好，世界";
+		
+		str2File2(str,"D:\\Work Note\\test\\111.txt");
+		
+		//测试字符串输出到指定文件
+		//String str = "as大红色的递四方速递发多少发多少发生\r\n的发生的发送地斯蒂芬sad发生的发多少发生的发生的发多少发生的";
+		//str2File(str,"D:\\Work Note\\test\\111.txt");
 		
 	}
 	
