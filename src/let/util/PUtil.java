@@ -347,6 +347,7 @@ public class PUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
+		// 需要再左面创建comm文件夹
 		createSql("E_QIS_INFO_HEADER", "t", dp1, 1);
 		createSql("E_QIS_INFO_HEADER", "t", dp2, 2);
 		createSql("E_QIS_INFO_HEADER", "t", dp3, 3);
